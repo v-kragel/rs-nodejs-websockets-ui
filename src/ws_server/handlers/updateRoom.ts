@@ -1,8 +1,9 @@
 import { WebSocket } from "ws";
 import { roomsStore } from "../../db/roomDb.js";
 import { OutgoingMessage } from "../../types/messages.js";
+import { clientsStore } from "../../db/clientsDb.js";
 
-export function handleUpdateRoom(ws: WebSocket) {
+export function handleUpdateRoom() {
   const soloRooms = roomsStore.getSoloRooms();
 
   const message: OutgoingMessage = {
@@ -11,5 +12,5 @@ export function handleUpdateRoom(ws: WebSocket) {
     data: JSON.stringify(soloRooms),
   };
 
-  ws.send(JSON.stringify(message));
+  clientsStore.sendMessageToOpenedClients(JSON.stringify(message));
 }

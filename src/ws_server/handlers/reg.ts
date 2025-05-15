@@ -56,7 +56,7 @@ export function handleReg(ws: WebSocket, payload: RegRequestData): void {
   ws.send(JSON.stringify(message));
 
   if (!response.error) {
-    handleUpdateRoom(ws);
+    handleUpdateRoom();
     handleUpdateWinners();
   }
 }

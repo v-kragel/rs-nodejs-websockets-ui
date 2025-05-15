@@ -15,9 +15,5 @@ export function handleUpdateWinners() {
 
   const rawMessage = JSON.stringify(message);
 
-  for (const [ws] of clients) {
-    if (ws.readyState === WebSocket.OPEN) {
-      ws.send(rawMessage);
-    }
-  }
+  clientsStore.sendMessageToOpenedClients(rawMessage);
 }

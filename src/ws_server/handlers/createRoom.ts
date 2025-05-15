@@ -15,5 +15,5 @@ export function handleCreateRoom(ws: WebSocket) {
 
   roomsStore.createRoom(player);
 
-  handleUpdateRoom(ws);
+  handleUpdateRoom();
 }

@@ -18,6 +18,14 @@ class ClientsStore {
   getAll(): Map<WebSocket, string> {
     return this.clients;
   }
+
+  sendMessageToOpenedClients(message: string) {
+    for (const [ws] of this.clients) {
+      if (ws.readyState === WebSocket.OPEN) {
+        ws.send(message);
+      }
+    }
+  }
 }
 
 export const clientsStore = new ClientsStore();
