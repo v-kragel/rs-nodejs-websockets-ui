@@ -2,7 +2,8 @@ export type MessageType =
   | "reg"
   | "update_room"
   | "update_winners"
-  | "create_room";
+  | "create_room"
+  | "add_user_to_room";
 
 export interface IncomingMessageRaw {
   type: MessageType;
@@ -16,7 +17,6 @@ export interface OutgoingMessage {
   data: string;
 }
 
-// ========== REG ==========
 export interface RegRequestData {
   name: string;
   password: string;
@@ -24,7 +24,11 @@ export interface RegRequestData {
 
 export interface RegResponseData {
   name: string;
-  index: number | string;
+  index: string;
   error: boolean;
   errorText: string;
+}
+
+export interface AddUserToRoomRequestData {
+  indexRoom: string;
 }

@@ -28,7 +28,7 @@ export function handleReg(ws: WebSocket, payload: RegRequestData): void {
     } else {
       response = {
         name,
-        index: 0,
+        index: "0",
         error: true,
         errorText: "Invalid password",
       };

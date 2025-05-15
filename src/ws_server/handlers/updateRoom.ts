@@ -1,4 +1,3 @@
-import { WebSocket } from "ws";
 import { roomsStore } from "../../db/roomDb.js";
 import { OutgoingMessage } from "../../types/messages.js";
 import { clientsStore } from "../../db/clientsDb.js";
