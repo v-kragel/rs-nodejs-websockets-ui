@@ -1,4 +1,4 @@
-export type MessageType = "reg" | "update_room";
+export type MessageType = "reg" | "update_room" | "update_winners";
 
 export interface IncomingMessageRaw {
   type: MessageType;

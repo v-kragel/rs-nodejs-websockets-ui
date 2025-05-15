@@ -2,7 +2,11 @@ import { WebSocket } from "ws";
 import { IncomingMessageRaw } from "../types/messages.js";
 import { handleReg } from "./handlers/reg.js";
 
-export function handleMessage(ws: WebSocket, raw: string): void {
+export function handleMessage(
+  ws: WebSocket,
+  raw: string,
+  clients: Set<WebSocket>
+): void {
   let message: IncomingMessageRaw;
 
   try {
@@ -23,7 +27,7 @@ export function handleMessage(ws: WebSocket, raw: string): void {
 
   switch (message.type) {
     case "reg":
-      handleReg(ws, message.id, parsedData);
+      handleReg(ws, message.id, parsedData, clients);
       break;
 
     default:

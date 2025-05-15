@@ -6,11 +6,13 @@ import {
 } from "../../types/messages.js";
 import { playersStore } from "../../db/playerDb.js";
 import { handleUpdateRoom } from "./updateRoom.js";
+import { handleUpdateWinners } from "./updateWinners.js";
 
 export function handleReg(
   ws: WebSocket,
   id: number,
-  payload: RegRequestData
+  payload: RegRequestData,
+  clients: Set<WebSocket>
 ): void {
   const { name, password } = payload;
 
@@ -55,5 +57,6 @@ export function handleReg(
 
   if (!response.error) {
     handleUpdateRoom(ws);
+    handleUpdateWinners(clients);
   }
 }
