@@ -7,16 +7,16 @@ class PlayersStore {
     return this.players;
   }
 
-  findByName(name: string): Player | undefined {
+  getByName(name: string): Player | undefined {
     return this.players.find((p) => p.name === name);
+  }
+
+  getByIndex(index: string): Player | undefined {
+    return this.players.find((p) => p.index === index);
   }
 
   add(player: Player): void {
     this.players.push(player);
-  }
-
-  indexOf(player: Player): number {
-    return this.players.indexOf(player);
   }
 }
 

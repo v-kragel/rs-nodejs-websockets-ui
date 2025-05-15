@@ -7,6 +7,8 @@ import {
 import { playersStore } from "../../db/playerDb.js";
 import { handleUpdateRoom } from "./updateRoom.js";
 import { handleUpdateWinners } from "./updateWinners.js";
+import { randomUUID } from "node:crypto";
+import { clientsStore } from "../../db/clientsDb.js";
 
 export function handleReg(
   ws: WebSocket,
@@ -16,7 +18,7 @@ export function handleReg(
 ): void {
   const { name, password } = payload;
 
-  const existing = playersStore.findByName(name);
+  const existing = playersStore.getByName(name);
 
   let response: RegResponseData;
 
@@ -24,24 +26,27 @@ export function handleReg(
     if (existing.password === password) {
       response = {
         name,
-        index: playersStore.indexOf(existing),
+        index: existing.index,
         error: false,
         errorText: "",
       };
     } else {
       response = {
         name,
-        index: -1,
+        index: 0,
         error: true,
         errorText: "Invalid password",
       };
     }
   } else {
-    playersStore.add({ name, password });
+    const index = randomUUID();
+
+    playersStore.add({ name, password, index });
+    clientsStore.addClient(ws, index);
 
     response = {
       name,
-      index: playersStore.getAll().length - 1,
+      index: index,
       error: false,
       errorText: "",
     };
