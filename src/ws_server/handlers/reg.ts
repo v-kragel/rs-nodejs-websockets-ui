@@ -4,7 +4,7 @@ import {
   RegResponseData,
   OutgoingMessage,
 } from "../../types/messages.js";
-import { playerStore } from "../../db/playerDb.js";
+import { playersStore } from "../../db/playerDb.js";
 import { handleUpdateRoom } from "./updateRoom.js";
 
 export function handleReg(
@@ -14,7 +14,7 @@ export function handleReg(
 ): void {
   const { name, password } = payload;
 
-  const existing = playerStore.findByName(name);
+  const existing = playersStore.findByName(name);
 
   let response: RegResponseData;
 
@@ -22,7 +22,7 @@ export function handleReg(
     if (existing.password === password) {
       response = {
         name,
-        index: playerStore.indexOf(existing),
+        index: playersStore.indexOf(existing),
         error: false,
         errorText: "",
       };
@@ -35,11 +35,11 @@ export function handleReg(
       };
     }
   } else {
-    playerStore.add({ name, password });
+    playersStore.add({ name, password });
 
     response = {
       name,
-      index: playerStore.getAll().length - 1,
+      index: playersStore.getAll().length - 1,
       error: false,
       errorText: "",
     };
@@ -54,6 +54,6 @@ export function handleReg(
   ws.send(JSON.stringify(message));
 
   if (!response.error) {
-    handleUpdateRoom(ws)
+    handleUpdateRoom(ws);
   }
 }

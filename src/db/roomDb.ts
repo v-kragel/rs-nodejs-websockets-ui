@@ -1,10 +1,19 @@
 import { Room } from "../types/room.js";
 
-const rooms: Room[] = [];
+class RoomsStore {
+  private rooms: Room[] = [];
 
-export const roomStore = {
-  getAll: () => rooms,
-  getSoloRooms: () => rooms.filter((room) => room.roomUsers.length === 1),
-  createRoom: (room: Room) => rooms.push(room),
-  clear: () => (rooms.length = 0),
-};
+  getAll(): Room[] {
+    return this.rooms;
+  }
+
+  getSoloRooms(): Room[] {
+    return this.rooms.filter((room) => room.roomUsers.length === 1);
+  }
+
+  createRoom(room: Room): void {
+    this.rooms.push(room);
+  }
+}
+
+export const roomsStore = new RoomsStore();
