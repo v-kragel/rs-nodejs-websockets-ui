@@ -14,6 +14,10 @@ class ClientsStore {
   removeClient(ws: WebSocket): void {
     this.clients.delete(ws);
   }
+
+  getAll(): Map<WebSocket, string> {
+    return this.clients;
+  }
 }
 
 export const clientsStore = new ClientsStore();

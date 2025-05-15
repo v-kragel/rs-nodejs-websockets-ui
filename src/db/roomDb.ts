@@ -1,4 +1,6 @@
+import { randomUUID } from "node:crypto";
 import { Room } from "../types/room.js";
+import { Player } from "../types/player.js";
 
 class RoomsStore {
   private rooms: Room[] = [];
@@ -11,7 +13,9 @@ class RoomsStore {
     return this.rooms.filter((room) => room.roomUsers.length === 1);
   }
 
-  createRoom(room: Room): void {
+  createRoom({ name, index }: Player): void {
+    const roomId = randomUUID();
+    const room: Room = { roomId, roomUsers: [{ name, index }] };
     this.rooms.push(room);
   }
 }

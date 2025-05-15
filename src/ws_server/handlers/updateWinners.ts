@@ -1,9 +1,11 @@
 import { WebSocket } from "ws";
 import { winnersStore } from "../../db/winnersDb.js";
 import { OutgoingMessage } from "../../types/messages.js";
+import { clientsStore } from "../../db/clientsDb.js";
 
-export function handleUpdateWinners(clients: Set<WebSocket>) {
+export function handleUpdateWinners() {
   const winners = winnersStore.getAll();
+  const clients = clientsStore.getAll();
 
   const message: OutgoingMessage = {
     type: "update_winners",
@@ -13,9 +15,9 @@ export function handleUpdateWinners(clients: Set<WebSocket>) {
 
   const rawMessage = JSON.stringify(message);
 
-  for (const client of clients) {
-    if (client.readyState === WebSocket.OPEN) {
-      client.send(rawMessage);
+  for (const [ws] of clients) {
+    if (ws.readyState === WebSocket.OPEN) {
+      ws.send(rawMessage);
     }
   }
 }

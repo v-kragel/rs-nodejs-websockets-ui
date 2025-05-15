@@ -10,12 +10,7 @@ import { handleUpdateWinners } from "./updateWinners.js";
 import { randomUUID } from "node:crypto";
 import { clientsStore } from "../../db/clientsDb.js";
 
-export function handleReg(
-  ws: WebSocket,
-  id: number,
-  payload: RegRequestData,
-  clients: Set<WebSocket>
-): void {
+export function handleReg(ws: WebSocket, payload: RegRequestData): void {
   const { name, password } = payload;
 
   const existing = playersStore.getByName(name);
@@ -54,7 +49,7 @@ export function handleReg(
 
   const message: OutgoingMessage = {
     type: "reg",
-    id,
+    id: 0,
     data: JSON.stringify(response),
   };
 
@@ -62,6 +57,6 @@ export function handleReg(
 
   if (!response.error) {
     handleUpdateRoom(ws);
-    handleUpdateWinners(clients);
+    handleUpdateWinners();
   }
 }

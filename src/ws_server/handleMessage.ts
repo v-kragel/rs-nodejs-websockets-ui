@@ -1,12 +1,9 @@
 import { WebSocket } from "ws";
 import { IncomingMessageRaw } from "../types/messages.js";
 import { handleReg } from "./handlers/reg.js";
+import { handleCreateRoom } from "./handlers/createRoom.js";
 
-export function handleMessage(
-  ws: WebSocket,
-  raw: string,
-  clients: Set<WebSocket>
-): void {
+export function handleMessage(ws: WebSocket, raw: string): void {
   let message: IncomingMessageRaw;
 
   try {
@@ -19,7 +16,7 @@ export function handleMessage(
   let parsedData: any;
 
   try {
-    parsedData = JSON.parse(message.data);
+    parsedData = JSON.parse(message.data || "{}");
   } catch (err) {
     console.error("Malformed data field (should be JSON string)");
     return;
@@ -27,7 +24,11 @@ export function handleMessage(
 
   switch (message.type) {
     case "reg":
-      handleReg(ws, message.id, parsedData, clients);
+      handleReg(ws, parsedData);
+      break;
+
+    case "create_room":
+      handleCreateRoom(ws);
       break;
 
     default:
