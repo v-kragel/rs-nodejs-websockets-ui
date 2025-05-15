@@ -5,6 +5,7 @@ import {
   OutgoingMessage,
 } from "../../types/messages.js";
 import { playerStore } from "../../db/playerDb.js";
+import { handleUpdateRoom } from "./updateRoom.js";
 
 export function handleReg(
   ws: WebSocket,
@@ -51,4 +52,8 @@ export function handleReg(
   };
 
   ws.send(JSON.stringify(message));
+
+  if (!response.error) {
+    handleUpdateRoom(ws)
+  }
 }
