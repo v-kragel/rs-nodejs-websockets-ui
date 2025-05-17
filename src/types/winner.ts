@@ -1,4 +1,6 @@
+import { User } from "./user";
+
 export interface Winner {
-  name: string;
+  user: User;
   wins: number;
 }

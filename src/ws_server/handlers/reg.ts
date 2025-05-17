@@ -1,57 +1,35 @@
 import { WebSocket } from "ws";
-import {
-  RegRequestData,
-  RegResponseData,
-  OutgoingMessage,
-} from "../../types/messages.js";
-import { playersStore } from "../../db/playerDb.js";
+import { RegRequestData, RegResponseData } from "../../types/messages.js";
+import { usersStore } from "../../db/userDb.js";
 import { handleUpdateRoom } from "./updateRoom.js";
 import { handleUpdateWinners } from "./updateWinners.js";
-import { randomUUID } from "node:crypto";
-import { clientsStore } from "../../db/clientsDb.js";
+import { generateWsMessage } from "../../utils/generateWsMessage.js";
+import { sendMessage } from "../../utils/sendMessage.js";
+import { isPasswordValid } from "../../utils/isPasswordValid.js";
+import {
+  createErrorRegResponse,
+  createSuccessRegResponse,
+} from "../../utils/getRegResponse.js";
 
 export function handleReg(ws: WebSocket, payload: RegRequestData): void {
   const { name, password } = payload;
 
-  const existing = playersStore.getByName(name);
+  const existing = usersStore.getByName(name);
 
   let response: RegResponseData;
 
   if (existing) {
-    if (existing.password === password) {
-      response = {
-        name,
-        index: existing.index,
-        error: false,
-        errorText: "",
-      };
-    } else {
-      response = {
-        name,
-        index: "0",
-        error: true,
-        errorText: "Invalid password",
-      };
-    }
+    response = isPasswordValid(existing, password)
+      ? createSuccessRegResponse(name, existing.index)
+      : createErrorRegResponse(name, "Invalid password");
   } else {
-    const index = randomUUID();
-
-    playersStore.add({ name, password, index });
-    clientsStore.addClient(ws, index);
-
-    response = {
-      name,
-      index: index,
-      error: false,
-      errorText: "",
-    };
+    const user = usersStore.add(name, password, ws);
+    response = createSuccessRegResponse(name, user.index);
   }
 
-  const message: OutgoingMessage = {
-    type: "reg",
-    id: 0,
-    data: JSON.stringify(response),
-  };
+  const message = generateWsMessage("reg", response);
+
+  sendMessage(ws, message);
 
   ws.send(JSON.stringify(message));
 

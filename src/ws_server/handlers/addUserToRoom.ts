@@ -1,6 +1,5 @@
 import { WebSocket } from "ws";
-import { clientsStore } from "../../db/clientsDb.js";
-import { playersStore } from "../../db/playerDb.js";
+import { usersStore } from "../../db/userDb.js";
 import { AddUserToRoomRequestData } from "../../types/messages.js";
 import { roomsStore } from "../../db/roomDb.js";
 import { handleUpdateRoom } from "./updateRoom.js";
@@ -10,18 +9,15 @@ export function handleAddUserToRoom(
   ws: WebSocket,
   data: AddUserToRoomRequestData
 ) {
-  const playerIndex = clientsStore.getIndexBySocket(ws);
+  const { indexRoom: roomId } = data;
 
-  if (!playerIndex) return;
+  const user = usersStore.getBySocket(ws);
 
-  const player = playersStore.getByIndex(playerIndex);
+  if (!user) return;
 
-  if (!player) return;
-
-  const roomId = data.indexRoom;
-
-  roomsStore.addPlayerToRoom(roomId, player);
+  roomsStore.addUserToRoom(roomId, user);
 
   handleUpdateRoom();
+
   handleCreateGame(roomId);
 }

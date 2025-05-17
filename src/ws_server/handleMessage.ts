@@ -4,6 +4,7 @@ import { handleReg } from "./handlers/reg.js";
 import { handleCreateRoom } from "./handlers/createRoom.js";
 import { handleAddUserToRoom } from "./handlers/addUserToRoom.js";
 import { handleAddShips } from "./handlers/addShips.js";
+import { handleAttack } from "./handlers/attack.js";
 
 export function handleMessage(ws: WebSocket, raw: string): void {
   let message: IncomingMessageRaw;
@@ -39,6 +40,10 @@ export function handleMessage(ws: WebSocket, raw: string): void {
 
     case "add_ships":
       handleAddShips(parsedData);
+      break;
+
+    case "attack":
+      handleAttack(parsedData);
       break;
 
     default:

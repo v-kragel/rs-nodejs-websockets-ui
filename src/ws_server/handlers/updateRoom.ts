@@ -1,15 +1,17 @@
 import { roomsStore } from "../../db/roomDb.js";
-import { OutgoingMessage } from "../../types/messages.js";
-import { clientsStore } from "../../db/clientsDb.js";
+import { generateWsMessage } from "../../utils/generateWsMessage.js";
+import { usersStore } from "../../db/userDb.js";
+import { sendMessage } from "../../utils/sendMessage.js";
+import { WebSocket } from "ws";
 
 export function handleUpdateRoom() {
   const soloRooms = roomsStore.getSoloRooms();
 
-  const message: OutgoingMessage = {
-    type: "update_room",
-    id: 0,
-    data: JSON.stringify(soloRooms),
-  };
+  const message = generateWsMessage("update_room", soloRooms);
 
-  clientsStore.sendMessageToOpenedClients(JSON.stringify(message));
+  const openedSockets: WebSocket[] = usersStore.getAllOpenedSockets();
+
+  openedSockets.forEach((ws) => {
+    sendMessage(ws, message);
+  });
 }

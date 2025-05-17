@@ -1,9 +1,6 @@
-export type RoomUser = {
-  name: string;
-  index: string;
-};
+import { User } from "./user";
 
 export type Room = {
-  roomId: string | number;
-  roomUsers: RoomUser[];
+  roomId: string;
+  roomUsers: User[];
 };

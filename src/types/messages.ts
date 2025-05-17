@@ -1,4 +1,6 @@
-import { Ship } from "./ship";
+import { Room } from "./room";
+import { Position, Ship, HitResult } from "./game";
+import { Winner } from "./winner";
 
 export type MessageType =
   | "reg"
@@ -9,7 +11,8 @@ export type MessageType =
   | "create_game"
   | "add_ships"
   | "start_game"
-  | "turn";
+  | "turn"
+  | "attack";
 
 export interface IncomingMessageRaw {
   type: MessageType;
@@ -35,6 +38,9 @@ export interface RegResponseData {
   errorText: string;
 }
 
+export type UpdateRoomResponseData = Room[];
+
+export type UpdateWinnersResponseData = Winner[];
 export interface AddUserToRoomRequestData {
   indexRoom: string;
 }
@@ -59,8 +65,23 @@ export interface TurnResponseData {
   currentPlayer: string;
 }
 
+export interface AttackRequestData {
+  gameId: string;
+  x: number;
+  y: number;
+  indexPlayer: string;
+}
+
+export interface AttackResponseData {
+  position: Position;
+  currentPlayer: string;
+  status: HitResult;
+}
+
 export type ResponseType =
   | RegResponseData
+  | UpdateRoomResponseData
+  | UpdateWinnersResponseData
   | CreateGameResponseData
   | StartGameResponseData
   | TurnResponseData;

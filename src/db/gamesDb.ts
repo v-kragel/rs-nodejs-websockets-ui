@@ -1,6 +1,8 @@
 import { randomUUID } from "node:crypto";
-import { Game, GamePlayer } from "../types/game.js";
-import { Ship } from "../types/ship.js";
+import { Game, GamePlayer, Ship } from "../types/game.js";
+import { User } from "../types/user.js";
+import { getRandomPlayer } from "../utils/getRandomPlayer.js";
+import { getNextPlayer } from "../utils/getNextPlayer.js";
 
 class GamesStore {
   private games: Game[] = [];
@@ -13,15 +15,29 @@ class GamesStore {
     return this.games.find((g) => g.id === gameId);
   }
 
-  createGame(playersIndexes: string[]): Game {
+  findGamePlayerByIndex(index: string): GamePlayer | undefined {
+    const allPlayers = this.games.flatMap((g) => g.players);
+
+    return allPlayers.find((p) => p.user.index === index);
+  }
+
+  createGame(users: User[]): Game {
     const id = randomUUID();
-    const gamePlayers: GamePlayer[] = playersIndexes.map((index) => ({
-      index,
+
+    const gamePlayers: GamePlayer[] = users.map((user) => ({
+      user,
       ships: [],
+      hitsTaken: [],
     }));
 
-    const game = { id, players: gamePlayers };
+    const game: Game = {
+      id,
+      players: gamePlayers,
+      currentTurnPlayer: undefined,
+    };
+
     this.games.push(game);
+
     return game;
   }
 
@@ -30,19 +46,27 @@ class GamesStore {
 
     if (!game) return;
 
-    const gamePlayer = game.players.find((p) => p.index === playerIndex);
+    const gamePlayer = game.players.find((p) => p.user.index === playerIndex);
 
     if (!gamePlayer) return;
 
     gamePlayer.ships = [...ships];
   }
 
-  shouldStartGame(gameId: string): boolean {
+  switchTurn(gameId: string, wasHit: boolean) {
     const game = this.findById(gameId);
 
-    if (!game) return false;
+    if (!game) return;
 
-    return game.players.every((p) => !!p.ships.length);
+    if (wasHit) return;
+
+    const { players, currentTurnPlayer } = game;
+
+    if (!currentTurnPlayer) {
+      game.currentTurnPlayer = getRandomPlayer(players);
+    } else {
+      game.currentTurnPlayer = getNextPlayer(players, currentTurnPlayer);
+    }
   }
 }
 

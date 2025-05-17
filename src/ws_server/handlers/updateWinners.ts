@@ -1,17 +1,17 @@
 import { winnersStore } from "../../db/winnersDb.js";
-import { OutgoingMessage } from "../../types/messages.js";
-import { clientsStore } from "../../db/clientsDb.js";
+import { generateWsMessage } from "../../utils/generateWsMessage.js";
+import { WebSocket } from "ws";
+import { usersStore } from "../../db/userDb.js";
+import { sendMessage } from "../../utils/sendMessage.js";
 
 export function handleUpdateWinners() {
   const winners = winnersStore.getAll();
 
-  const message: OutgoingMessage = {
-    type: "update_winners",
-    id: 0,
-    data: JSON.stringify(winners),
-  };
+  const message = generateWsMessage("update_winners", winners);
 
-  const rawMessage = JSON.stringify(message);
+  const openedSockets: WebSocket[] = usersStore.getAllOpenedSockets();
 
-  clientsStore.sendMessageToOpenedClients(rawMessage);
+  openedSockets.forEach((ws) => {
+    sendMessage(ws, message);
+  });
 }

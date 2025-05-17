@@ -1,19 +1,14 @@
 import { WebSocket } from "ws";
-import { clientsStore } from "../../db/clientsDb.js";
-import { playersStore } from "../../db/playerDb.js";
+import { usersStore } from "../../db/userDb.js";
 import { roomsStore } from "../../db/roomDb.js";
 import { handleUpdateRoom } from "./updateRoom.js";
 
 export function handleCreateRoom(ws: WebSocket) {
-  const clientIndex = clientsStore.getIndexBySocket(ws);
+  const user = usersStore.getBySocket(ws);
 
-  if (!clientIndex) return;
+  if (!user) return;
 
-  const player = playersStore.getByIndex(clientIndex);
-
-  if (!player) return;
-
-  roomsStore.createRoom(player);
+  roomsStore.createRoom(user);
 
   handleUpdateRoom();
 }

@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
-import { Room, RoomUser } from "../types/room.js";
-import { Player } from "../types/player.js";
+import { Room } from "../types/room.js";
+import { User } from "../types/user.js";
 
 class RoomsStore {
   private rooms: Room[] = [];
@@ -17,23 +17,25 @@ class RoomsStore {
     return this.rooms.find((r) => r.roomId === roomId);
   }
 
-  createRoom({ name, index }: Player): void {
+  createRoom(user: User): void {
     const roomId = randomUUID();
-    const room: Room = { roomId, roomUsers: [{ name, index }] };
+
+    const room: Room = { roomId, roomUsers: [user] };
+
     this.rooms.push(room);
   }
 
-  addPlayerToRoom(roomId: string, { name, index }: Player): Room | null {
+  addUserToRoom(roomId: string, user: User): Room | null {
     const room = this.getById(roomId);
 
     if (!room) return null;
 
-    room.roomUsers.push({ name, index });
+    room.roomUsers.push(user);
 
     return room;
   }
 
-  getRoomPlayers(roomId: string): RoomUser[] | null {
+  getRoomUsers(roomId: string): User[] | null {
     const room = this.getById(roomId);
 
     if (!room) return null;
