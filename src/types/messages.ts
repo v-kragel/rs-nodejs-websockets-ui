@@ -1,10 +1,13 @@
+import { Ship } from "./ship";
+
 export type MessageType =
   | "reg"
   | "update_room"
   | "update_winners"
   | "create_room"
   | "add_user_to_room"
-  | "create_game";
+  | "create_game"
+  | "add_ships";
 
 export interface IncomingMessageRaw {
   type: MessageType;
@@ -35,6 +38,12 @@ export interface AddUserToRoomRequestData {
 }
 
 export interface CreateGameResponseData {
-  idGame: string | number;
-  idPlayer: string | number;
+  idGame: string;
+  idPlayer: string;
+}
+
+export interface AddShipRequestData {
+  gameId: string;
+  ships: Ship[];
+  indexPlayer: string;
 }
