@@ -1,5 +1,6 @@
 import { gamesStore } from "../../db/gamesDb.js";
 import { AddShipRequestData } from "../../types/messages.js";
+import { handleStartGame } from "./startGame.js";
 
 export function handleAddShips(payload: AddShipRequestData): void {
   const { gameId, indexPlayer, ships } = payload;
@@ -9,6 +10,6 @@ export function handleAddShips(payload: AddShipRequestData): void {
   const shouldStartGame = gamesStore.shouldStartGame(gameId);
 
   if (shouldStartGame) {
-    console.log("START THE GAME!!!!!!!!!!!!!!!!!");
+    handleStartGame(gameId);
   }
 }

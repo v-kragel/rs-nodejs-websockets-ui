@@ -7,7 +7,8 @@ export type MessageType =
   | "create_room"
   | "add_user_to_room"
   | "create_game"
-  | "add_ships";
+  | "add_ships"
+  | "start_game";
 
 export interface IncomingMessageRaw {
   type: MessageType;
@@ -46,4 +47,9 @@ export interface AddShipRequestData {
   gameId: string;
   ships: Ship[];
   indexPlayer: string;
+}
+
+export interface StartGameResponseData {
+  ships: Ship[];
+  currentPlayerIndex: string;
 }
