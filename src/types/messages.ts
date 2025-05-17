@@ -3,7 +3,8 @@ export type MessageType =
   | "update_room"
   | "update_winners"
   | "create_room"
-  | "add_user_to_room";
+  | "add_user_to_room"
+  | "create_game";
 
 export interface IncomingMessageRaw {
   type: MessageType;
@@ -31,4 +32,9 @@ export interface RegResponseData {
 
 export interface AddUserToRoomRequestData {
   indexRoom: string;
+}
+
+export interface CreateGameResponseData {
+  idGame: string | number;
+  idPlayer: string | number;
 }

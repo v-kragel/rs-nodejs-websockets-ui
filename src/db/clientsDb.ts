@@ -1,4 +1,5 @@
 import { WebSocket } from "ws";
+import { sendMessage } from "../utils/sendMessage.js";
 
 class ClientsStore {
   private clients: Map<WebSocket, string> = new Map();
@@ -19,12 +20,23 @@ class ClientsStore {
     return this.clients;
   }
 
-  sendMessageToOpenedClients(message: string) {
-    for (const [ws] of this.clients) {
-      if (ws.readyState === WebSocket.OPEN) {
-        ws.send(message);
-      }
+  getWsByIndex(index: string): WebSocket | null {
+    for (const [ws, clientIndex] of this.clients.entries()) {
+      if (clientIndex === index) return ws;
     }
+    return null;
+  }
+
+  sendMessageToOpenedClients(message: string): void {
+    for (const [ws] of this.clients) {
+      sendMessage(ws, message);
+    }
+  }
+
+  sendMessageToIndexes(indexes: string[], message: string): void {
+    const sockets = indexes.map((index) => this.getWsByIndex(index));
+
+    sockets.forEach((ws) => ws && sendMessage(ws, message));
   }
 }
 

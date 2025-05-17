@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { Room } from "../types/room.js";
+import { Room, RoomUser } from "../types/room.js";
 import { Player } from "../types/player.js";
 
 class RoomsStore {
@@ -31,6 +31,14 @@ class RoomsStore {
     room.roomUsers.push({ name, index });
 
     return room;
+  }
+
+  getRoomPlayers(roomId: string): RoomUser[] | null {
+    const room = this.getById(roomId);
+
+    if (!room) return null;
+
+    return room.roomUsers;
   }
 }
 

@@ -4,6 +4,7 @@ import { playersStore } from "../../db/playerDb.js";
 import { AddUserToRoomRequestData } from "../../types/messages.js";
 import { roomsStore } from "../../db/roomDb.js";
 import { handleUpdateRoom } from "./updateRoom.js";
+import { handleCreateGame } from "./createGame.js";
 
 export function handleAddUserToRoom(
   ws: WebSocket,
@@ -22,4 +23,5 @@ export function handleAddUserToRoom(
   roomsStore.addPlayerToRoom(roomId, player);
 
   handleUpdateRoom();
+  handleCreateGame(roomId);
 }

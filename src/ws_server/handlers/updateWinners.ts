@@ -1,11 +1,9 @@
-import { WebSocket } from "ws";
 import { winnersStore } from "../../db/winnersDb.js";
 import { OutgoingMessage } from "../../types/messages.js";
 import { clientsStore } from "../../db/clientsDb.js";
 
 export function handleUpdateWinners() {
   const winners = winnersStore.getAll();
-  const clients = clientsStore.getAll();
 
   const message: OutgoingMessage = {
     type: "update_winners",

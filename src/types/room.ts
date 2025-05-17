@@ -1,6 +1,6 @@
 export type RoomUser = {
   name: string;
-  index: number | string;
+  index: string;
 };
 
 export type Room = {
