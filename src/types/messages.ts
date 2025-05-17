@@ -8,7 +8,8 @@ export type MessageType =
   | "add_user_to_room"
   | "create_game"
   | "add_ships"
-  | "start_game";
+  | "start_game"
+  | "turn";
 
 export interface IncomingMessageRaw {
   type: MessageType;
@@ -53,3 +54,13 @@ export interface StartGameResponseData {
   ships: Ship[];
   currentPlayerIndex: string;
 }
+
+export interface TurnResponseData {
+  currentPlayer: string;
+}
+
+export type ResponseType =
+  | RegResponseData
+  | CreateGameResponseData
+  | StartGameResponseData
+  | TurnResponseData;

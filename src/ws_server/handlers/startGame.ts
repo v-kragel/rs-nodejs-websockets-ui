@@ -1,9 +1,7 @@
 import { clientsStore } from "../../db/clientsDb.js";
 import { gamesStore } from "../../db/gamesDb.js";
-import {
-  OutgoingMessage,
-  StartGameResponseData,
-} from "../../types/messages.js";
+import { StartGameResponseData } from "../../types/messages.js";
+import { generateWsMessage } from "../../utils/generateWsMessage.js";
 import { sendMessage } from "../../utils/sendMessage.js";
 
 export function handleStartGame(gameId: string): void {
@@ -21,12 +19,8 @@ export function handleStartGame(gameId: string): void {
       currentPlayerIndex: player.index,
     };
 
-    const message: OutgoingMessage = {
-      type: "start_game",
-      id: 0,
-      data: JSON.stringify(data),
-    };
+    const message = generateWsMessage("start_game", data);
 
-    sendMessage(ws, JSON.stringify(message));
+    sendMessage(ws, message);
   });
 }

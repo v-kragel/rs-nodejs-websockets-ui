@@ -8,4 +8,5 @@ export type GamePlayer = {
 export type Game = {
   id: string;
   players: GamePlayer[];
+  currentPlayer?: GamePlayer;
 };

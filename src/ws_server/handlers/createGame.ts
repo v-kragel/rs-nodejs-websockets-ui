@@ -1,11 +1,9 @@
 import { clientsStore } from "../../db/clientsDb.js";
 import { roomsStore } from "../../db/roomDb.js";
 import { gamesStore } from "../../db/gamesDb.js";
-import {
-  CreateGameResponseData,
-  OutgoingMessage,
-} from "../../types/messages.js";
+import { CreateGameResponseData } from "../../types/messages.js";
 import { sendMessage } from "../../utils/sendMessage.js";
+import { generateWsMessage } from "../../utils/generateWsMessage.js";
 
 export function handleCreateGame(roomId: string): void {
   const roomUsers = roomsStore.getRoomPlayers(roomId);
@@ -27,12 +25,8 @@ export function handleCreateGame(roomId: string): void {
       idPlayer: index,
     };
 
-    const message: OutgoingMessage = {
-      type: "create_game",
-      id: 0,
-      data: JSON.stringify(data),
-    };
+    const message = generateWsMessage("create_game", data);
 
-    sendMessage(ws, JSON.stringify(message));
+    sendMessage(ws, message);
   });
 }
