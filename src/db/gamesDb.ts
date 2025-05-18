@@ -41,6 +41,10 @@ class GamesStore {
     return game;
   }
 
+  removeGame(gameId: string): void {
+    this.games = this.games.filter((g) => g.id !== gameId);
+  }
+
   addShips(gameId: string, playerIndex: string, ships: Ship[]): void {
     const game = this.findById(gameId);
 

@@ -1,3 +1,4 @@
+import { gamesStore } from "../../db/gamesDb.js";
 import { winnersStore } from "../../db/winnersDb.js";
 import { Game } from "../../types/game.js";
 import { FinishGameResponseData } from "../../types/messages.js";
@@ -18,6 +19,8 @@ export function handleFinish(game: Game, winner: User) {
 
     sendMessage(player.user.ws, message);
   });
+
+  gamesStore.removeGame(game.id);
 
   handleUpdateWinners();
 }
