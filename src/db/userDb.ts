@@ -45,6 +45,14 @@ class UsersStore {
 
     return user;
   }
+
+  remove(ws: WebSocket): void {
+    const user = this.getBySocket(ws);
+
+    if (!user) return;
+
+    this.users = this.users.filter((u) => u.index !== user.index);
+  }
 }
 
 export const usersStore = new UsersStore();
