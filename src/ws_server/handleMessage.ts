@@ -48,6 +48,7 @@ export function handleMessage(ws: WebSocket, raw: string): void {
       break;
 
     case "attack":
+    case "randomAttack":
       handleAttack(parsedData);
       break;
 

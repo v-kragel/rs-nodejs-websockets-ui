@@ -5,6 +5,7 @@ import { generateWsMessage } from "../../utils/generateWsMessage.js";
 import { sendMessage } from "../../utils/sendMessage.js";
 import { handleTurn } from "./turn.js";
 import { processAttack } from "../../utils/processAttack.js";
+import { getRandomAvailableAttackPosition } from "../../utils/getRandomAvailableAttackPosition.js";
 
 export function handleAttack(data: AttackRequestData) {
   const { gameId, x, y, indexPlayer: attackerIndex } = data;
@@ -14,7 +15,9 @@ export function handleAttack(data: AttackRequestData) {
 
   if (attackerIndex !== game?.currentTurnPlayer?.user?.index) return;
 
-  const target: Position = { x, y };
+  const target: Position =
+    x && y ? { x, y } : getRandomAvailableAttackPosition(game, attackerIndex);
+
   const { result, gameOver, winnerId } = processAttack(
     game,
     target,
@@ -32,7 +35,7 @@ export function handleAttack(data: AttackRequestData) {
 
   game.players.forEach((player) => {
     const data: AttackResponseData = {
-      position: { x, y },
+      position: target,
       currentPlayer: attackerIndex,
       status: result,
     };

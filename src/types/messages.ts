@@ -12,7 +12,8 @@ export type MessageType =
   | "add_ships"
   | "start_game"
   | "turn"
-  | "attack";
+  | "attack"
+  | "randomAttack";
 
 export interface IncomingMessageRaw {
   type: MessageType;
@@ -67,8 +68,8 @@ export interface TurnResponseData {
 
 export interface AttackRequestData {
   gameId: string;
-  x: number;
-  y: number;
+  x?: number;
+  y?: number;
   indexPlayer: string;
 }
 
