@@ -42,7 +42,7 @@ export interface RegResponseData {
 
 export type UpdateRoomResponseData = Room[];
 
-export type UpdateWinnersResponseData = Winner[];
+export type UpdateWinnersResponseData = { name: string; wins: number }[];
 export interface AddUserToRoomRequestData {
   indexRoom: string;
 }

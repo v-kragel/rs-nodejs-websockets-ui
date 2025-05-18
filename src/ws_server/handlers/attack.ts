@@ -7,6 +7,7 @@ import { handleTurn } from "./turn.js";
 import { processAttack } from "../../utils/processAttack.js";
 import { getRandomAvailableAttackPosition } from "../../utils/getRandomAvailableAttackPosition.js";
 import { handleFinish } from "./finish.js";
+import { usersStore } from "../../db/userDb.js";
 
 export function handleAttack(data: AttackRequestData) {
   const { gameId, x, y, indexPlayer: attackerIndex } = data;
@@ -28,7 +29,11 @@ export function handleAttack(data: AttackRequestData) {
   );
 
   if (gameOver && winnerIndex) {
-    handleFinish(game, winnerIndex);
+    const winner = usersStore.getByIndex(winnerIndex);
+
+    if (!winner) return;
+
+    handleFinish(game, winner);
     return;
   }
 
