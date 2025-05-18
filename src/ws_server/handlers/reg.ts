@@ -5,7 +5,6 @@ import { handleUpdateRoom } from "./updateRoom.js";
 import { handleUpdateWinners } from "./updateWinners.js";
 import { generateWsMessage } from "../../utils/generateWsMessage.js";
 import { sendMessage } from "../../utils/sendMessage.js";
-import { isPasswordValid } from "../../utils/isPasswordValid.js";
 import {
   createErrorRegResponse,
   createSuccessRegResponse,
@@ -19,9 +18,7 @@ export function handleReg(ws: WebSocket, payload: RegRequestData): void {
   let response: RegResponseData;
 
   if (existing) {
-    response = isPasswordValid(existing, password)
-      ? createSuccessRegResponse(name, existing.index)
-      : createErrorRegResponse(name, "Invalid password");
+    response = createErrorRegResponse(name, "This user already authorized");
   } else {
     const user = usersStore.add(name, password, ws);
     response = createSuccessRegResponse(name, user.index);
