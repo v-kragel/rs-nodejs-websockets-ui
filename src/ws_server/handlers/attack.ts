@@ -6,6 +6,7 @@ import { sendMessage } from "../../utils/sendMessage.js";
 import { handleTurn } from "./turn.js";
 import { processAttack } from "../../utils/processAttack.js";
 import { getRandomAvailableAttackPosition } from "../../utils/getRandomAvailableAttackPosition.js";
+import { handleFinish } from "./finish.js";
 
 export function handleAttack(data: AttackRequestData) {
   const { gameId, x, y, indexPlayer: attackerIndex } = data;
@@ -16,17 +17,18 @@ export function handleAttack(data: AttackRequestData) {
   if (attackerIndex !== game?.currentTurnPlayer?.user?.index) return;
 
   const target: Position =
-    x && y ? { x, y } : getRandomAvailableAttackPosition(game, attackerIndex);
+    typeof x === "number" && typeof y === "number"
+      ? { x, y }
+      : getRandomAvailableAttackPosition(game, attackerIndex);
 
-  const { result, gameOver, winnerId } = processAttack(
+  const { result, gameOver, winnerIndex } = processAttack(
     game,
     target,
     attackerIndex
   );
 
-  if (gameOver) {
-    console.log("GAME OVER!");
-    console.log("winnerId", winnerId);
+  if (gameOver && winnerIndex) {
+    handleFinish(game, winnerIndex);
     return;
   }
 

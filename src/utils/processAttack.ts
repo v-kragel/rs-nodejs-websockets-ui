@@ -39,6 +39,6 @@ export function processAttack(
   return {
     result,
     gameOver: allShipsDestroyed,
-    winnerId: allShipsDestroyed ? attackerId : undefined,
+    winnerIndex: allShipsDestroyed ? attackerId : undefined,
   };
 }

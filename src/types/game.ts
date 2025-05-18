@@ -41,5 +41,5 @@ export type GamePlayer = {
 export type AttackResult = {
   result: HitResult;
   gameOver: boolean;
-  winnerId?: string;
+  winnerIndex?: string;
 };

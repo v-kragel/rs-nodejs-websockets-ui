@@ -13,7 +13,8 @@ export type MessageType =
   | "start_game"
   | "turn"
   | "attack"
-  | "randomAttack";
+  | "randomAttack"
+  | "finish";
 
 export interface IncomingMessageRaw {
   type: MessageType;
@@ -79,10 +80,15 @@ export interface AttackResponseData {
   status: HitResult;
 }
 
+export interface FinishGameResponseData {
+  winPlayer: string;
+}
+
 export type ResponseType =
   | RegResponseData
   | UpdateRoomResponseData
   | UpdateWinnersResponseData
   | CreateGameResponseData
   | StartGameResponseData
-  | TurnResponseData;
+  | TurnResponseData
+  | FinishGameResponseData;
